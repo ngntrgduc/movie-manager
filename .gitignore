@@ -5,9 +5,9 @@ archive
 *.ipynb
 
 test.py
-devlog.md
 
 data.csv
 backup.csv
 
 remove_note.py
+*.excalidraw
