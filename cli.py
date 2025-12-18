@@ -213,16 +213,19 @@ def add():
     print(f"Added {movie['type']}: {movie['name']!r} ({movie['year']})")
 
 @cli.command()
-@click.argument('movie_id', type=int)
+@click.argument('movie_id', type=int, required=False)
 @click.option('-n', '--note', help='Only update note', is_flag=True)
-def update(movie_id, note):
+@click.option('-l', '--latest', is_flag=True, help='Update the latest movie')
+def update(movie_id, note, latest):
     """Update a movie interactively by id."""
     from utils.movie import get_movie, update_movie
     from utils.movie_input import prompt_update_movie
+    from utils.cli import resolve_movie_id
 
     CON.row_factory = sqlite3.Row
     cur = CON.cursor()
 
+    movie_id = resolve_movie_id(movie_id, latest, cur)
     existing_movie = get_movie(movie_id, cur)
     if existing_movie is None:
         print(f'Movie with id {movie_id} not found.')
@@ -241,14 +244,17 @@ def update(movie_id, note):
     print('Updated successfully.')
 
 @cli.command()
-@click.argument('movie_id', type=int)
-def delete(movie_id: int):
+@click.argument('movie_id', type=int, required=False)
+@click.option('-l', '--latest', is_flag=True, help='Delete the latest movie')
+def delete(movie_id, latest):
     """Delete a movie by id."""
     from utils.movie import get_movie, delete_movie
+    from utils.cli import resolve_movie_id
 
     CON.row_factory = sqlite3.Row  # for dictionary conversion
     cur = CON.cursor()
 
+    movie_id = resolve_movie_id(movie_id, latest, cur)
     # Sacrifice formatting for speed by using a tuple instead of a pandas DataFrame
     # Importing pandas is costly compared to sqlite
     movie = get_movie(movie_id, cur)

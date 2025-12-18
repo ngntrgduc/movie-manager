@@ -166,3 +166,22 @@ def print_sql_files(sql_files: list[str]) -> None:
     console.print('[bold cyan]Available SQL files:[/bold cyan]')
     colored_files = [f'[green]{name}[/green]' for name in sql_files]
     console.print(Columns(colored_files, equal=True, expand=True))
+
+def resolve_movie_id(movie_id, latest, cur) -> int | None:
+    """
+    Resolve the target movie ID for update and delete commands.
+
+    Ensures that either a MOVIE_ID or the --latest flag is provided, but not both.
+    """
+    from utils.db import fetch_scalar
+
+    if movie_id and latest:
+        raise click.UsageError('Cannot use MOVIE_ID and --latest together.')
+
+    if not movie_id and not latest:
+        raise click.UsageError('You must provide MOVIE_ID or use --latest.')
+
+    if latest:
+        return fetch_scalar(cur, 'SELECT id FROM movie ORDER BY id DESC LIMIT 1')
+
+    return movie_id
