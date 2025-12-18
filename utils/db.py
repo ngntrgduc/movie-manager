@@ -6,7 +6,7 @@ def get_connection(file_path: str = 'data/movies.db') -> sqlite3.Connection:
     con.execute('PRAGMA foreign_keys = ON')  # enable foreign keys constraint and ON DELETE CASCADE
     return con
 
-def fetch_scalar(cur: sqlite3.Cursor, query: str) -> int | float:
+def fetch_scalar(cur: sqlite3.Cursor, query: str) -> int | float | None:
     """Run a SQL query and return its single scalar value."""
     return cur.execute(query).fetchone()[0]
 
