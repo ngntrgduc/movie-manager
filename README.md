@@ -11,7 +11,7 @@ So I built this movie manager as a more convenient way to manage my movie collec
 - CLI to add, filter, and analyze movie data
   - Fast CLI experience by lazy importing
   - Run SQL script in `sql/` folder, provide flexibility and customization
-- Backup and Restore functionality (CLI)
+- Backup and Restore functionality
 - Testing functionalities
 
 ## Tech stack

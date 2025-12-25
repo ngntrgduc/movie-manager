@@ -7,6 +7,7 @@ pg = st.navigation(
         st.Page("pages/3_edit_movie.py", title="Edit"),
         st.Page("pages/4_visualization.py", title="Visualization"),
         st.Page("pages/5_sql.py", title="SQL"),
+        st.Page("pages/6_backup_restore.py", title="Backup & Restore"),
     ],
     position="top"
 )
