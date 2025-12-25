@@ -8,10 +8,10 @@ So I built this movie manager as a more convenient way to manage my movie collec
 - Full CRUD support
 - Track essential metadata: `name`, `year`, `status`, `type`, `country`, `genres`, `rating`, `watched_date`, `note`
 - Interactive dashboard with Power BI (Streamlit charts are limited and less interactive compared to Power BI)
-- CLI to add, filter, and analyze movie data
+- [Feature-rich CLI](#cli)
   - Fast CLI experience by lazy importing
-  - Run SQL script in `sql/` folder, provide flexibility and customization
-- Backup and Restore functionality
+- Run SQL script in `sql/` folder, provide flexibility and customization
+- Backup and Restore
 - Testing functionalities
 
 ## Tech stack
@@ -79,6 +79,7 @@ uv sync --extra cli
 ```
 streamlit run app.py
 ```
+### CLI
 - Run the CLI (if installed with `--extra cli`):
 ```
 py cli.py
