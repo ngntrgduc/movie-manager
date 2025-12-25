@@ -88,6 +88,7 @@ def filter(
         if genres:
             from utils.format import format_genres
             from utils.movie import get_genres
+            from utils.fuzzy import get_fuzzy_match
 
             all_genres = get_genres(cur)
             resolved_genres = []
@@ -96,11 +97,21 @@ def filter(
             # Example: "com" → "comedy" (but not "dark comedy")
             # This prevents LIKE '%com%' from matching wrong genres.
             for filter_genre in format_genres(genres):
+                resolved = False
                 for genre in all_genres:
                     if genre.startswith(filter_genre):
                         resolved_genres.append(genre)
+                        resolved = True
                         break
+
+                if resolved:
+                    continue
+
+                resolved_fuzzy_genre = get_fuzzy_match(filter_genre, all_genres)
+                if resolved_fuzzy_genre:
+                    resolved_genres.append(resolved_fuzzy_genre)
             
+            print(f'Matched genres: {resolved_genres}')
             # Exact genre match using comma-delimited boundaries
             for resolved_genre in resolved_genres:
                 clause.append("',' || genres || ',' LIKE ?")
@@ -117,6 +128,9 @@ def filter(
             clause.append('note LIKE ?')
             parameters.append(f'%{note_contains}%')
         
+        if not clause:
+            return None, None
+
         where_clause = 'WHERE ' + ' AND '.join(clause)
         select_clause = 'SELECT * FROM movie_detail '
         query = select_clause + where_clause
@@ -125,6 +139,9 @@ def filter(
     query, parameters = get_filter_query(
         name, year, status, movie_type, country, genres, rating, watched_year, note_contains
     )
+    if query is None:
+        print('No data.')
+        return
 
     # Show note if note_contains is given
     note = True if note_contains else note
