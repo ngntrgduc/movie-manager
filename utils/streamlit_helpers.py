@@ -50,3 +50,8 @@ def load_column_config() -> dict:
         'date': st.column_config.TextColumn(width=30),
         'note': st.column_config.TextColumn(width='small'),
     }
+
+def df_statistics(df: pd.DataFrame) -> str:
+    """Return statistics of dataframe as string"""
+    return f'Total: **{df.shape[0]}**, \
+        Memory usage: **{df.memory_usage().sum() / 1024:.2f} KB**'
