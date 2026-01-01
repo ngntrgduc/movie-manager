@@ -20,6 +20,9 @@ with open('sql/schema.sql', 'r') as f:
 def get_movie_name(movie: tuple) -> str:
     return movie[1]
 
+def get_movie_genres(movie: tuple) -> str | list[str]:
+    return movie[6]
+
 @pytest.fixture(scope='module')
 def db():
     con = sqlite3.connect(':memory:')
@@ -38,6 +41,8 @@ def test_read_db(db):
     assert get_movie_name(get_movie(5, cur)) == 'Soul'
     assert get_movie(6, cur) == None
     assert fetch_rows_count(cur) == 5
+    assert 'thriller' in get_movie_genres(get_movie(1, cur)), \
+        'Error in parsing genres. Expect list of genres, return characters instead'
 
 def test_add_db(db):
     new_movie = {
