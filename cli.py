@@ -7,6 +7,12 @@ from utils.db import get_connection
 from utils.timing import timing
 from utils.cli import AliasedGroup
 
+import logging
+from logging_config import setup_logging
+
+setup_logging()
+logger = logging.getLogger('cli')  # prevent showing __main__ in log
+
 DB_FILE = Path('data/movies.db')
 BACKUP_FILE = Path('data/backup.db')
 CON = get_connection(DB_FILE)
@@ -259,6 +265,16 @@ def update(movie_id, note, latest):
     CON.commit()
     update_csv()
     print('Updated successfully.')
+    if 'status' in updated_data:
+        logger.info(
+            'Updated movie id=%s %s (%s) status=%s', 
+            movie_id, existing_movie['name'], existing_movie['year'], updated_data['status']
+        )
+    else:
+        logger.info(
+            'Updated movie id=%s %s (%s)', 
+            movie_id, existing_movie['name'], existing_movie['year']
+        )
 
 @cli.command()
 @click.argument('movie_id', type=int, required=False)
@@ -282,11 +298,12 @@ def delete(movie_id, latest):
     movie = dict(movie)
     print(movie)
 
-    if click.confirm(f'Do you want to delete this {movie['type']}?', default=True):
+    if click.confirm(f"Do you want to delete this {movie['type']}?", default=True):
         delete_movie(movie_id, cur)
         CON.commit()
         update_csv()
         print('Deleted successfully.')
+        logger.info('Deleted movie id=%s %s (%s)', movie_id, movie['name'], movie['year'])
     else:
         print('Deletion cancelled.')
 
@@ -344,10 +361,12 @@ def backup(csv):
             df = load_movies(CON, with_index=True)
             df.to_csv('data/backup.csv', index=False)
         print('Backup successful.')
+        logger.info('Backup successful')
     except click.Abort:
         print('Aborted!')
     except Exception as e:
         print(f'Backup failed: {e}')
+        logger.exception('Backup failed')
 
 @cli.command()
 def restore():
@@ -368,8 +387,10 @@ def restore():
         shutil.copyfile(BACKUP_FILE, DB_FILE)
         update_csv()
         print('Restore successful.')
+        logger.info('Restore successful')
     except Exception as e:
         print(f'Restore failed: {e}')
+        logger.exception('Restore failed')
 
 @cli.command()
 @click.argument('filename', type=str, required=False)
@@ -480,16 +501,24 @@ def optimize():
         cur.execute('VACUUM')
     except Exception as e:
         print(f'[red]Error during VACUUM:[/red] {e}')
+        logger.exception('Database optimization failed')
         return
 
     after = get_file_size(DB_FILE)
     reduction = before - after
     percent = (reduction / before * 100)
+    repr_before = convert_bytes(before)
+    repr_after = convert_bytes(after)
+    repr_reduction = convert_bytes(reduction)
     print(
-        f'VACUUM completed. Size reduced from {convert_bytes(before)} to {convert_bytes(after)}'
-        f' ({convert_bytes(reduction)}, {percent:.1f}% reduction).'
+        f'VACUUM completed. Size reduced from {repr_before} to {repr_after}'
+        f' ({repr_reduction}, {percent:.1f}% reduction).'
     )
     print('Database optimized successfully.')
+    logger.info(
+        'Database optimized: size_before=%s size_after=%s reduction=%s percent=%.1f%',
+        repr_before, repr_after, repr_reduction, percent,
+    )
 
 
 if __name__ == '__main__':

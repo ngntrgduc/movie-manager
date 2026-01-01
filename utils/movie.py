@@ -1,4 +1,7 @@
 import sqlite3
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_genre_id(name: str, cur: sqlite3.Cursor) -> int:
     """Get genre id by name."""
@@ -40,14 +43,24 @@ def add_movie(movie: dict, cur: sqlite3.Cursor) -> None:
     movie_id = cur.lastrowid
     add_movie_genre(movie_id, movie['genres'], cur)
 
+    logger.info('Added %s id=%s: %s (%s)', movie['type'], movie_id, movie['name'], movie['year'])
+    # Add movie data without note, prevent messy log
+    logger.debug(
+        'Added movie data: %s',
+        {k: v for k, v in movie.items() if k != 'note'}
+    )
+
 def delete_movie(movie_id: int, cur: sqlite3.Cursor) -> None:
     """Delete a movie by id."""
     cur.execute("DELETE FROM movie WHERE id = ?", (movie_id,))
+    logger.info('Deleted movie id=%s', movie_id)
 
 def update_movie(movie_id: int, updated_data: dict, cur: sqlite3.Cursor) -> None:
     """Update an existing movie by id."""
     if not updated_data:
         return 
+
+    fields = list(updated_data.keys())
 
     # movie table doesn't has genres field
     genres = updated_data.pop('genres', None)
@@ -62,6 +75,8 @@ def update_movie(movie_id: int, updated_data: dict, cur: sqlite3.Cursor) -> None
     if genres is not None:
         cur.execute("DELETE FROM movie_genre WHERE movie_id = ?", (movie_id,)) # remove old relations
         add_movie_genre(movie_id, genres, cur)
+
+    logger.info('Updated movie id=%s fields=%s', movie_id, fields)
 
 def load_movies(con: sqlite3.Connection, with_index: bool = False):
     """

@@ -1,0 +1,11 @@
+2026-01-01 00:20:40 [INFO] cli | Backup successful
+2026-01-01 00:21:50 [INFO] cli | Restore successful
+2026-01-01 12:44:53 [INFO] cli | Database optimized: size_before=76.0 KB size_after=76.0 KB reduction=0.0 bytes percent=0.0
+2026-01-01 12:56:06 [INFO] cli | Backup successful
+2026-01-01 14:38:45 [INFO] csv_to_sqlite | Imported 326 movies from CSV file=data\data.csv, took 0.0487
+2026-01-01 14:42:09 [INFO] utils.movie | Added movie id=327: Testing logging!!! (2025)
+2026-01-01 14:42:09 [DEBUG] utils.movie | Added movie data: {'name': 'Testing logging!!!', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': None, 'genres': ['action'], 'rating': None, 'watched_date': None}
+2026-01-01 14:42:35 [INFO] utils.movie | Updated movie id=327 fields=['country', 'genres']
+2026-01-01 14:42:36 [INFO] cli | Updated movie id=327 Testing logging!!! (2025)
+2026-01-01 14:43:06 [INFO] utils.movie | Deleted movie id=327
+2026-01-01 14:43:07 [INFO] cli | Deleted movie id=327 Testing logging!!! (2025)
