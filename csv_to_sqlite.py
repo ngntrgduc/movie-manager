@@ -1,22 +1,38 @@
 import sqlite3
 import pandas as pd
 from utils.movie import add_movie
+import logging
+
+logger = logging.getLogger('csv_to_sqlite')
 
 def csv_to_sqlite(df: pd.DataFrame, con: sqlite3.Connection) -> None:
     """Export csv data to SQLite database."""
     cur = con.cursor()
-    for _, movie in df.iterrows():
-        movie_dict = dict(movie)
-        # Convert pandas NaN to None for SQLite
-        # When reading CSV with pandas, numeric columns with missing values become NaN.
-        # SQLite does not understand NaN, so we convert them to None which maps to NULL in SQLite.
-        movie_dict['year'] = int(movie['year']) if not pd.isna(movie['year']) else None
-        movie_dict['rating'] = float(movie['rating']) if not pd.isna(movie['rating']) else None
-        add_movie(movie_dict, cur)
+
+    # Temporarily silence INFO logs from utils.movie for bulk adding
+    movie_logger = logging.getLogger('utils.movie')
+    previous_level = movie_logger.level
+    movie_logger.setLevel(logging.WARNING)
+
+    try:
+        df['genres'] = df['genres'].fillna('').str.split(',')
+        for _, movie in df.iterrows():
+            movie_dict = dict(movie)
+            # Convert pandas NaN to None for SQLite
+            # When reading CSV with pandas, numeric columns with missing values become NaN.
+            # SQLite does not understand NaN, so we convert them to None which maps to NULL in SQLite.
+            movie_dict['year'] = int(movie['year']) if not pd.isna(movie['year']) else None
+            movie_dict['rating'] = float(movie['rating']) if not pd.isna(movie['rating']) else None
+            add_movie(movie_dict, cur)
+    finally:
+        movie_logger.setLevel(previous_level)
 
 if __name__ == '__main__':
     from time import perf_counter
     from pathlib import Path
+    from logging_config import setup_logging
+
+    setup_logging()
 
     tic = perf_counter()
     DB_PATH = Path('data/movies.db')
@@ -44,4 +60,6 @@ if __name__ == '__main__':
     con.commit()
 
     con.close()
-    print(f'Moved data from CSV to SQLite database, took {(perf_counter() - tic):.4f}s.')
+    duration = perf_counter() - tic
+    print(f'Moved data from CSV to SQLite database, took {duration:.4f}s.')
+    logger.info('Imported %s movies from CSV file=%s, took %.4f', len(df), CSV_PATH, duration)
