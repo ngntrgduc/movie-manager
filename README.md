@@ -12,7 +12,7 @@ So I built this movie manager as a more convenient way to manage my movie collec
   - Fast CLI experience by lazy importing
 - Run SQL script in `sql/` folder, provide flexibility and customization
 - Backup and Restore
-- Testing functionalities
+- Testing and Logging functionalities (for CLI)
 
 ## Tech stack
 - Web UI: Streamlit
@@ -34,6 +34,7 @@ For schema detail, see [schema.sql](/sql/schema.sql)
 ![](/images/data.png)
 ![](/images/add.png)
 ![](/images/edit.png)
+![](/images/sql_page.png)
 
 **Dashboard**
 ![](/images/dashboard.png)
