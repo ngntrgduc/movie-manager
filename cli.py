@@ -520,6 +520,19 @@ def optimize():
         repr_before, repr_after, repr_reduction, percent,
     )
 
+@cli.command()
+def recommend():
+    """Recommend some movies or series."""
+    from pathlib import Path
+    from utils.sql import run_sql
+    from utils.cli import print_rows
+
+    cur = CON.cursor()
+
+    print('Recent added:')
+    rows, column_names = run_sql(cur, Path('sql/recentwaiting.sql').read_text())
+    print_rows(rows, column_names, hide_columns=['rating', 'watched_date'])
+
 
 if __name__ == '__main__':
     try:
