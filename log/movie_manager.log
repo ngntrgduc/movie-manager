@@ -1,0 +1,50 @@
+2026-01-01 00:20:40 [INFO] cli | Backup successful
+2026-01-01 00:21:50 [INFO] cli | Restore successful
+2026-01-01 12:44:53 [INFO] cli | Database optimized: size_before=76.0 KB size_after=76.0 KB reduction=0.0 bytes percent=0.0
+2026-01-01 12:56:06 [INFO] cli | Backup successful
+2026-01-01 14:38:45 [INFO] csv_to_sqlite | Imported 326 movies from CSV file=data\data.csv, took 0.0487
+2026-01-01 14:42:09 [INFO] utils.movie | Added movie id=327: Testing logging!!! (2025)
+2026-01-01 14:42:09 [DEBUG] utils.movie | Added movie data: {'name': 'Testing logging!!!', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': None, 'genres': ['action'], 'rating': None, 'watched_date': None}
+2026-01-01 14:42:35 [INFO] utils.movie | Updated movie id=327 fields=['country', 'genres']
+2026-01-01 14:42:36 [INFO] cli | Updated movie id=327 Testing logging!!! (2025)
+2026-01-01 14:43:06 [INFO] utils.movie | Deleted movie id=327
+2026-01-01 14:43:07 [INFO] cli | Deleted movie id=327 Testing logging!!! (2025)
+2026-01-02 23:13:55 [INFO] csv_to_sqlite | Imported 326 movies from CSV file=data\data.csv, took 0.1129
+2026-01-02 23:14:17 [INFO] cli | Backup successful
+2026-01-06 20:02:47 [INFO] utils.movie | Added series id=327: Can This Love Be Translated? (2026)
+2026-01-06 20:02:47 [DEBUG] utils.movie | Added movie data: {'name': 'Can This Love Be Translated?', 'year': 2026, 'status': 'waiting', 'type': 'series', 'country': 'Korea', 'genres': ['romance', 'comedy'], 'rating': None, 'watched_date': None}
+2026-01-07 20:51:38 [INFO] utils.movie | Added movie id=328: One Battle After Another (2025)
+2026-01-07 20:51:38 [DEBUG] utils.movie | Added movie data: {'name': 'One Battle After Another', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': 'US', 'genres': ['action', 'crime', 'thriller', 'comedy'], 'rating': None, 'watched_date': None}
+2026-01-13 13:45:30 [INFO] utils.movie | Added movie id=329: The Shadow's Edge (2025)
+2026-01-13 13:45:30 [DEBUG] utils.movie | Added movie data: {'name': "The Shadow's Edge", 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': 'China', 'genres': ['action', 'crime', 'thriller'], 'rating': None, 'watched_date': None}
+2026-01-13 23:28:31 [INFO] utils.movie | Added movie id=330: American Psycho (2000)
+2026-01-13 23:28:31 [DEBUG] utils.movie | Added movie data: {'name': 'American Psycho', 'year': 2000, 'status': 'waiting', 'type': 'movie', 'country': 'US', 'genres': ['crime', 'thriller', 'horror'], 'rating': None, 'watched_date': None}
+2026-01-18 00:48:40 [INFO] utils.movie | Added movie id=331: People We Meet on Vacation (2026)
+2026-01-18 00:48:40 [DEBUG] utils.movie | Added movie data: {'name': 'People We Meet on Vacation', 'year': 2026, 'status': 'waiting', 'type': 'movie', 'country': 'US', 'genres': ['romance', 'comedy'], 'rating': None, 'watched_date': None}
+2026-01-18 16:19:33 [INFO] utils.movie | Added movie id=332: The Drama (2026)
+2026-01-18 16:19:33 [DEBUG] utils.movie | Added movie data: {'name': 'The Drama', 'year': 2026, 'status': 'waiting', 'type': 'movie', 'country': 'US', 'genres': ['romance', 'comedy'], 'rating': None, 'watched_date': None}
+2026-01-18 16:20:53 [INFO] utils.movie | Added movie id=333: The Running Man (2025)
+2026-01-18 16:20:53 [DEBUG] utils.movie | Added movie data: {'name': 'The Running Man', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': 'US', 'genres': ['sci-fi', 'thriller', 'action'], 'rating': None, 'watched_date': None}
+2026-01-18 16:49:10 [INFO] utils.movie | Added movie id=334: Lost in Starlight (2025)
+2026-01-18 16:49:10 [DEBUG] utils.movie | Added movie data: {'name': 'Lost in Starlight', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': 'Korea', 'genres': ['animation', 'sci-fi', 'romance'], 'rating': None, 'watched_date': None}
+2026-01-18 17:03:41 [INFO] utils.movie | Added movie id=335: Chainsaw Man – The Movie: Reze Arc (2025)
+2026-01-18 17:03:41 [DEBUG] utils.movie | Added movie data: {'name': 'Chainsaw Man – The Movie: Reze Arc', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': 'Japan', 'genres': ['animation', 'fantasy', 'romance', 'action'], 'rating': None, 'watched_date': None}
+2026-01-18 21:22:58 [INFO] utils.movie | Added movie id=336: Long Day’s Journey Into Night (2018)
+2026-01-18 21:22:58 [DEBUG] utils.movie | Added movie data: {'name': 'Long Day’s Journey Into Night', 'year': 2018, 'status': 'waiting', 'type': 'movie', 'country': 'China', 'genres': ['mystery'], 'rating': None, 'watched_date': None}
+2026-01-18 21:26:32 [INFO] utils.movie | Added movie id=337: Resurrection (2025)
+2026-01-18 21:26:32 [DEBUG] utils.movie | Added movie data: {'name': 'Resurrection', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': 'China', 'genres': ['romance', 'fantasy', 'sci-fi'], 'rating': None, 'watched_date': None}
+2026-01-18 22:30:55 [INFO] utils.movie | Added movie id=338: Sore: A Wife from the Future (2025)
+2026-01-18 22:30:55 [DEBUG] utils.movie | Added movie data: {'name': 'Sore: A Wife from the Future', 'year': 2025, 'status': 'waiting', 'type': 'movie', 'country': None, 'genres': ['sci-fi', 'fantasy', 'romance'], 'rating': None, 'watched_date': None}
+2026-01-19 23:04:23 [INFO] utils.movie | Updated movie id=335 fields=['note']
+2026-01-19 23:04:24 [INFO] cli | Updated movie id=335 Chainsaw Man – The Movie: Reze Arc (2025)
+2026-01-19 23:12:39 [INFO] utils.movie | Added series id=339: Violet Evergarden (2018)
+2026-01-19 23:12:39 [DEBUG] utils.movie | Added movie data: {'name': 'Violet Evergarden', 'year': 2018, 'status': 'waiting', 'type': 'series', 'country': 'Japan', 'genres': ['animation', 'fantasy', 'romance'], 'rating': None, 'watched_date': None}
+2026-01-19 23:21:36 [INFO] utils.movie | Updated movie id=335 fields=['note']
+2026-01-19 23:21:36 [INFO] cli | Updated movie id=335 Chainsaw Man – The Movie: Reze Arc (2025)
+2026-01-20 10:38:44 [INFO] utils.movie | Updated movie id=338 fields=['genres']
+2026-01-20 10:38:46 [INFO] cli | Updated movie id=338 Sore: A Wife from the Future (2025)
+2026-01-20 15:03:36 [INFO] cli | Backup successful
+2026-01-20 16:47:32 [INFO] utils.movie | Updated movie id=166 fields=['status', 'rating', 'watched_date', 'note']
+2026-01-20 16:47:33 [INFO] cli | Updated movie id=166 Sing 2 (2021) status=completed
+2026-01-20 17:03:19 [INFO] utils.movie | Updated movie id=166 fields=['rating']
+2026-01-20 17:03:20 [INFO] cli | Updated movie id=166 Sing 2 (2021)
