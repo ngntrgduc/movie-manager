@@ -1,23 +1,27 @@
 ## Todo
 - [ ] Movies recommendation using ML + Model Compression (quantization, prune, distillation?)
     - [ ] Using cache_resource when loading model
-    - [ ] Collect data: movielens?
-    - [ ] Data processing
-        Use content-based filtering by computing similarity between movies.
+    - Use content-based filtering by computing similarity between movies.
     - [ ] Use recent watched genres to recommend movies with waiting status
     - [ ] Dimension reduction if it slow (SVD, PCA)
-    - [ ] NLP for plot summaries? TF-IDF? -> recommend movies based on their plots summaries
-        Why not TF-IDF? TF-IDF downweights words that appear frequently (like "Action"). In movie recommendations, if you love "Action", you want that word to carry heavy weight.
     - [ ] Using `recommend` for recommendation in CLI? or in web app? or .ipynb?
+        - [ ] Accept movie id to get the "More like this" recommendation
+        - [ ] accept genres by -g + Knowledge-based recsys, also consider other options like country or type, status always = 'waiting'
     - [ ] Using LLM to create Overview of movie by name, year, country?, to create plot soup?
     - [ ] Sentiment analysis for Note field to extract useful information. Both for Vietnamese and English
         - [ ] Using LLM for Sentiment analysis? does it sensible? (but reduce privacy)
     - [ ] How does adding episodes_count and episode_length affect recsys performance?
     - [ ] TF-IDF -> SBERT (sentence-transformers)?
+    - [ ] maybe later on move to hybrid approach, with CF using movielens dataset, with more recent data
+    - [ ] Add recent adding for Recommandation page/recommend command, maybe using 5 latest rows, this partly show user interests at current time
+        - [ ] Also using recent watched data + rating, very good information for recsys
+    - [ ] Does it really necessary to implement sequence aware recsys? or it considered overengineered?
+    - [ ] How about LLM + recsys?
 - [ ] Calling LLM API for smart summarize like: total watched time,... using name and year field
   - [ ] As a chatbot interface?
 - [ ] Add another table for watched movies in the past (long time ago) but don't remember the date exactly. Maybe just contains: id, name, year, country.
-- [ ] Add epsisode, length columns (or as a table) for more metadata, more fun to data-analysis
+- [ ] Add epsisode, length columns (or as a table) for more metadata, more fun to data-analysis like: total watched time, total watched time for a genre...
+- [ ] Make all completed/dropped movie without watched date be marked as 'Past'/'In the past'? does it reasonable to do that?
 
 ### CLI
 - [ ] CLI demo as GIF and put it in README
@@ -27,17 +31,21 @@
     - [ ] showing countries (5+) option when adding/updating is cluttered, bad UX -> hide it instead: show_default = False 
         - [ ] Or hide it when the total length exceed a specific threshold?
     - [ ] Add confirmation when adding new country
+- [ ] `info` command to call Gemini API to summarize movie info: description, ratings, casts...
+    - [ ] Implement llm.py in utils, lazy loading genai lib?
+- [ ] Extend `recent` command, make it have some other option like country, type, status,...
+- [ ] Auto hide empty column in print_rows, not just filter command have it, sql can have it too
+- [ ] `range` command to filter movie by id in range, or maybe add this to filter command
+- [ ] Add constants for default limit of `recent` and `latest` command in utils/constants?
+- [ ] Add constants for updating the csv file or not in utils/constants
+    - [ ] `csv` command to update csv file separately, instead of doing it after CRUD operations, faster UX?
+- [ ] Run CLI by using shorter name like `mm ...` (movie-manager) instead of `py cli.py ...` (using uv?)
 
 ### Web App
 - [ ] Add input validation for Add and Edit pages
     - [ ] Year, date, rating validation 
 - [ ] Genres edit/delete page
-- [ ] Back up & restore functionality for web app, with confirmation dialog
-    - [ ] Show last modified backup date
-    - [ ] Show toast when complete
-- [ ] SQL page for web app, select script, show dataframe
-    - [ ] Show SQL code in file, using st.code(query, language='sql')
-    - left col: script select + run button(?) + sql code display; right col: dataframe
+- [ ] Add Hide note/Show note column checkbox for Data page
 
 ### Dashboard
 - [ ] Allow it to use sqlite database instead of csv -> faster CLI experience
@@ -72,6 +80,19 @@
 - [x] Display number of rows for current database file and backup file for backup command
 - [x] Alias commands (prefix match + fuzzy matching), better and faster UX, less to type
 - [x] Add testing for csv_to_sqlite and CRUD operations on database logic, using pytest, `:memory:` for testing with sqlite
+- [x] Add `-l/--latest` flag or option for update/delete operations for operating on the latest movie id
+- [x] Create small jupyter notebook for quick visualization compare to power bi dashboard
+- [x] Add Visualization page
+- [x] SQL page for web app, select script, show dataframe
+    - [x] Show SQL code in file, using st.code(query, language='sql')
+- [x] Back up & restore functionality for web app, with confirmation dialog
+    - [x] Show last modified backup date
+    - [x] Show toast when complete
+- [x] Add Visualization and SQL page for web app
+- [x] Add logging functionalities for CRUD (db related, backup restore...) in CLI
+    - [x] Update csv_to_sqlite to prevent logging
+- [x] Allow user to write and run SQL code directly, instead of just select SQL filename
+
 
 ## Abandoned
 - Color for dataframe using pandas Styler -> Pandas Styler does not compatible with streamlit dataframe, keep it simple
@@ -98,3 +119,6 @@
 - pomodoro utils to keep track watched time of this week -> too much friction, inaccurate
 - Allow to type id for update/delete command if not provided -> redundant, let click handle it
 - Running all the tests by using `check` command in CLI -> No UX benefit, use uv run pytest instead
+- Testing for CLI commands -> Not necessary, make it harder to maintain
+- Add logging for web app -> Harder to maintain
+- Add .dbml (Database Markup Language) file -> Why doesn't have sqlite conversion :), so many limitations
