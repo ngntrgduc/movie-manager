@@ -523,7 +523,6 @@ def optimize():
 @cli.command()
 def recommend():
     """Recommend some movies or series."""
-    from pathlib import Path
     from utils.sql import run_sql
     from utils.cli import print_rows
 
