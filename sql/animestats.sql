@@ -1,6 +1,6 @@
 WITH anime AS (
     SELECT * 
-    FROM movie
+    FROM movie_detail
     WHERE country = 'Japan' AND genres LIKE '%animation%'
 )
 SELECT
@@ -10,7 +10,6 @@ SELECT
     SUM(CASE WHEN type = 'movie' THEN 1 ELSE 0 END) AS movie_count,
     SUM(CASE WHEN type = 'series' THEN 1 ELSE 0 END) AS series_count,
     ROUND(AVG(rating), 2) AS avg_rating
-FROM movie_detail
-WHERE country = 'Japan' AND genres LIKE '%animation%'
+FROM anime
 GROUP BY status
 ORDER BY count DESC
