@@ -52,6 +52,7 @@ For schema detail, see [schema.sql](/sql/schema.sql)
 - The CLI `add`/`update` command cannot add/update new country, use the web app instead.
 
 ## Recent updates
+- `v0.4.0` - Added logging, content-based recommender system, improved CLI and web app
 - `v0.3.1` - Improved CLI, added testing
 - `v0.3.0` - Major CLI upgrades with new commands, SQL-based filtering, improved sorting, new utilities, and performance refinements
 - `v0.2.0` - Data stored in SQLite database instead of CSV, faster experience, CLI now has more functionality and can run SQL scripts
