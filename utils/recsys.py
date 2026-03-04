@@ -1,8 +1,10 @@
 import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
 from utils.constants import UNWATCHED_STATUS
 
 def build_item_feature_matrix(df: pd.DataFrame) -> pd.DataFrame:
     """Build a numeric feature matrix for item-based recommendation."""
+
     df_features = df.copy()
     df_features = df_features.drop(columns=['rating', 'watched_date'])
 
@@ -24,7 +26,6 @@ def build_item_feature_matrix(df: pd.DataFrame) -> pd.DataFrame:
 
 def build_item_similarity_matrix(feature_matrix, df: pd.DataFrame) -> pd.DataFrame:
     """Compute cosine similarity between all items."""
-    from sklearn.metrics.pairwise import cosine_similarity
 
     similarity_matrix = cosine_similarity(feature_matrix)
     return pd.DataFrame(
@@ -33,7 +34,7 @@ def build_item_similarity_matrix(feature_matrix, df: pd.DataFrame) -> pd.DataFra
         columns=df['id']
     )
 
-def recommend(movie_id: int, df: pd.DataFrame, top_k : int = 5) -> pd.DataFrame:
+def recommend(movie_id: int, df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
     """Recommend similar unwatched movies based on cosine similarity."""
 
     feature_matrix = build_item_feature_matrix(df) 
@@ -52,7 +53,27 @@ def recommend(movie_id: int, df: pd.DataFrame, top_k : int = 5) -> pd.DataFrame:
 
     return df[df['id'].isin(top_movies.index)]
 
+def recommend_recent_profile(df, profile_size: int = 5, top_k: int = 5):
+    """Recommend movies using a user profile built from recently watched movies."""
 
-# def build_user_profile(vector) -> np.array:
-#     # TODO: weighted rating
-#     return np.mean(vector, axis=0)
+    df = df.copy()
+    watched_df = df[df['status'] == 'completed']
+    recent = watched_df.sort_values('watched_date', ascending=False).head(profile_size)
+    
+    feature_matrix = build_item_feature_matrix(df) 
+    user_profile = feature_matrix.loc[recent.index].mean(axis=0)
+
+    similarities = cosine_similarity([user_profile], feature_matrix)
+    similarities = similarities.flatten()
+
+    sim_series = pd.Series(similarities, index=df['id'])
+
+    # remove watched movies
+    unwatched_ids = df[df['status'] == UNWATCHED_STATUS]['id']
+    sim_series = sim_series[sim_series.index.isin(unwatched_ids)]
+
+    top_ids = sim_series.sort_values(ascending=False).head(top_k).index
+
+    # preserve ranking orders
+    recommended = df.set_index('id').loc[top_ids].reset_index()
+    return recommended

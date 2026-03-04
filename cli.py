@@ -525,11 +525,21 @@ def optimize():
 @click.argument('k', type=int, required=False, default=5)
 @timing
 def recommend(movie_id, k):
-    """Recommend K movies based on movie_id if provided."""
+    """Recommend K movies by movie ID or based on recent watched movies."""
     from utils.cli import print_rows
 
     cur = CON.cursor()
     hide_columns = ['rating', 'watched_date']
+
+    def display_recommended(recommended) -> None:
+        """Format and display recommended movies using print_rows."""
+        recommended = recommended.fillna('')  # Prevent print_rows from displaying NaN values
+        rows = list(recommended.itertuples(index=False, name=None))  # match print_rows type hint
+        headers = recommended.columns.tolist()
+        print_rows(rows, headers, hide_columns=hide_columns)
+
+    df = load_movies(CON)
+    df = df.drop(columns='note').reset_index(drop=True)
 
     if movie_id is not None:
         from utils.movie import get_movie
@@ -546,18 +556,16 @@ def recommend(movie_id, k):
         print(f"Recommend {k} movies similar to: {movie['name']} ({movie['year']})")
         from utils.recsys import recommend
 
-        df = load_movies(CON)
-        df = df.drop(columns='note')
-        df = df.reset_index(drop=True)
-
         print('Computing item similarity matrix...')
         recommended = recommend(movie['id'], df, top_k=k)
-        recommended = recommended.fillna('')  # make print_rows won't disply nan values
-        rows = list(recommended.itertuples(index=False, name=None))  # match print_rows type hint
-        headers = recommended.columns.tolist()
-        print_rows(rows, headers, hide_columns=hide_columns)
+        display_recommended(recommended)
     else:
         from utils.sql import run_sql
+        from utils.recsys import recommend_recent_profile
+
+        print('Based on recently watched movies:')
+        recommended = recommend_recent_profile(df, top_k=k)
+        display_recommended(recommended)
 
         print('Recent added movies:')
         rows, column_names = run_sql(cur, Path('sql/recentwaiting.sql').read_text())
