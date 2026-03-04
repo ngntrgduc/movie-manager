@@ -1,3 +1,89 @@
+2026-03-04
+- for similarity-based (item-item), there no need for evaluation because there is no ground truth
+- use minmaxscaler from scikitlearn to prevent information leakage when train-test spliting
+- Build similarity matrix using ALL movies, not remove dropped and completed status
+- completed recsys feature for content-based item-item
+
+2026-03-02
+- for small dataset at current (~350 movies with 66 completed), ML and DL models are overkill, stick with content-based item similarity
+- matrix factorization/LightFM method for recsys often used for many users and ratings, not suitable for current dataset. Use it for CF task in hybrid recsys
+
+2026-03-01
+- LDA is useful only if dataset have plot, description, reviews, tags (text, topics)
+
+2026-02-28
+- without description/plot/info (text) field, there's no point of using SBERT. And the review field is a bit personal, not suitable for SBERT input
+- tf-idf also unecessary, its more suitable for document data (term frequency)
+- tf-idf become useful if we have plot summaries, reviews
+
+2026-02-21
+- using `mm` shorthand for calling py cli.py ... won't run the clean up (close sqlite connection)
+- git hook is ideal for: linting, formating, they are not ideal for data transforming, like remove note column from database, this will endup 2 separated database files for the workflow
+
+2026-01-20
+- derive added movie/series from movie_manager.log
+
+2026-01-03
+- minmaxscaler is better than mean-centered scaling because it is easier to inptepret, all values is non-negative, in range [0,1], the dot product is monotonic
+  - with mean-centering: below-average year becomes a penalty -> not meaningful for movies, but it capture relative preference
+  - with minmax: higher year/rating -> more similar (higher year is refered as recent movies, more era-suitable)
+- Rating is used as weights
+  - rating prediction often happen in CF recsys, and user-item matrix, not CB recsys
+- cosine similarity focus on "same direction or not?", ignore the magnitude
+  - dot product is more suitable
+- item-item similarity -> use cosine
+- user-item similarity -> use dot product
+
+2026-01-02
+- add custom sql for sql page in web app
+  - add save sql code to file later on
+
+2026-01-01
+- multiline user note is bad in logs, make it messy and harder to read
+- log with format like id=... is easier to read and parse, compare to something like id: ..., id = ..., id ...,...
+- add logging functionalities
+
+2025-12-31
+- Use lazy formatting instead of f-string: logger.info(f'Add movie: %s', movie)
+  - Logging is lazy by design — f-strings break that
+- the traceback of logger.exception already includes the exception message
+
+2025-12-30
+- Sequence Aware Recsys is overkill, just CB + filtering (recency) is enough
+- Why not TF-IDF in recsys: TF-IDF downweights words that appear frequently (like "Action"). In movie recommendations, if you love "Action", you want that word to carry heavy weight.
+
+2025-12-26
+- build content-based filtering on: genres, type, country, year (normalize)
+  - compute feature vector: [Action=1,Adventure=0,...US=1,...year=2025,...]
+  - user profile p_u: rating (normalize by mean-centering: r_i - \mu before bulding user profile), watched_date (weight recent watches, using decay)
+  - use status to filter candidates
+  - score unseen items
+  - can either weighting before building user profile, and after building user profile (heuristic, but easy to implement)
+- The user profile is a compressed representation of user preference in the same feature space as items. User profile = direction of taste
+  - pu​=∑i​∣ri​−μ∣∑i​(ri​−μ)⋅vi​​
+- Content-based -> item-feature matrix
+
+2025-12-25
+- streamlit is multithreaded, so be careful to work with sqlite connection and CRUD operation
+- fix sql recent command
+- add visualization, backup restore for web app
+
+2025-12-24
+- no need dimension reduction for now
+
+2025-12-22
+- cannot have a "popular now" for this project
+- using cosine similarity is more suitable for quantiative rating, intead of jaccard for unary/binary rating
+
+2025-12-21
+- worldcloud for genres is bad visualization
+- Add visualization notebook
+
+2025-12-18
+- custom click type is bad for update/delete operation with -l/--latest flag
+- add --latest flag for delete and update command
+- will develop content-based filtering recsys, ditch collaborative filtering
+
 2025-12-11
 - pytest docs is bad, bro
 - StringIO provide: no disk access . Much faster than TemporaryFile in tempfile
