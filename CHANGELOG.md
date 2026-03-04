@@ -18,6 +18,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  -->
 
+## [[v0.4.0](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.0)]
+### Added
+- Testing for cli utils
+- devlog
+- Visualization notebook `notebooks/visualization.ipynb`, faster visualization look compare to Power BI dashboard
+- Logging functionalities for `add`, `update`, `delete`, `backup`, `restore`, `optimize` command for CLI, for csv_to_sqlite.py
+- Script to get added movie/series from main log
+- SQL: `animestats` (view statistics of anime)
+- Content-based recommender system via `recommend` command
+
+#### CLI
+- `-l/--latest` flag to `update` and `delete` commands, allow operating on the latest row in the database
+- Add fuzzy matching genres for `filter` command
+
+#### Web app
+- Visualization page 
+- SQL page to run SQL scripts, both predefined SQL in `sql/` folder and custom SQL
+- Backup & Restore page
+
+### Fixed
+- Handle empty filter clause lead to invalid SQL
+- Fix sql `recent` command
+- `csv_to_sqlite` parse genres from csv as characters, not genres
+
 ## [[v0.3.1](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.3.1)]
 ### Added
 - `fetch_rows_count` in `utils/db.py` to fetch rows count of a table
