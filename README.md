@@ -96,19 +96,20 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  add       Add a new movie interactively.
-  backup    Back up data.
-  delete    Delete a movie by id.
-  filter    Filter movies by attributes.
-  get       Get information of a movie by id.
-  latest    Show latest added movies.
-  optimize  Optimize the SQLite database using VACUUM.
-  recent    Show recently watched movies.
-  restore   Restore data from backup.
-  search    Search movies by keyword.
-  sql       Run a SQL file from the 'sql/' folder.
-  stats     Show statistics for the movie data.
-  update    Update a movie interactively by id.
+  add        Add a new movie interactively.
+  backup     Back up data.
+  delete     Delete a movie by id.
+  filter     Filter movies by attributes.
+  get        Get information of a movie by id.
+  latest     Show latest added movies.
+  optimize   Optimize the SQLite database using VACUUM.
+  recent     Show recently watched movies.
+  recommend  Recommend K movies based on movie_id if provided.
+  restore    Restore data from backup.
+  search     Search movies by keyword.
+  sql        Run a SQL file from the 'sql/' folder.
+  stats      Show statistics for the movie data.
+  update     Update a movie interactively by id.
 ```
 
 ## Development
