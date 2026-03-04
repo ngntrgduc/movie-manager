@@ -7,12 +7,13 @@ So I built this movie manager as a more convenient way to manage my movie collec
 ## Features
 - Full CRUD support
 - Track essential metadata: `name`, `year`, `status`, `type`, `country`, `genres`, `rating`, `watched_date`, `note`
-- Interactive dashboard with Power BI (Streamlit charts are limited and less interactive compared to Power BI)
+- Interactive dashboard with Power BI
 - [Feature-rich CLI](#cli)
   - Fast CLI experience by lazy importing
 - Run SQL script in `sql/` folder, provide flexibility and customization
 - Backup and Restore
 - Testing and Logging functionalities (for CLI)
+- Content-based movies recommender system (for CLI)
 
 ## Tech stack
 - Web UI: Streamlit
