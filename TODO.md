@@ -1,22 +1,16 @@
 ## Todo
-- [ ] Movies recommendation using ML + Model Compression (quantization, prune, distillation?)
-    - [ ] Using cache_resource when loading model
-    - Use content-based filtering by computing similarity between movies.
-    - [ ] Use recent watched genres to recommend movies with waiting status
-    - [ ] Dimension reduction if it slow (SVD, PCA)
-    - [ ] Using `recommend` for recommendation in CLI? or in web app? or .ipynb?
-        - [ ] Accept movie id to get the "More like this" recommendation
+- [x] Movies recommendation system using item similarity (Content-based)
+    - [x] Using `recommend` command for recommendation
+        - [x] Accept movie id to get the "More like this" recommendation
         - [ ] accept genres by -g + Knowledge-based recsys, also consider other options like country or type, status always = 'waiting'
-    - [ ] Using LLM to create Overview of movie by name, year, country?, to create plot soup?
-    - [ ] Sentiment analysis for Note field to extract useful information. Both for Vietnamese and English
-        - [ ] Using LLM for Sentiment analysis? does it sensible? (but reduce privacy)
-    - [ ] How does adding episodes_count and episode_length affect recsys performance?
-    - [ ] TF-IDF -> SBERT (sentence-transformers)?
-    - [ ] maybe later on move to hybrid approach, with CF using movielens dataset, with more recent data
-    - [ ] Add recent adding for Recommandation page/recommend command, maybe using 5 latest rows, this partly show user interests at current time
-        - [ ] Also using recent watched data + rating, very good information for recsys
-    - [ ] Does it really necessary to implement sequence aware recsys? or it considered overengineered?
-    - [ ] How about LLM + recsys?
+    - [ ] Apply genres weighting, genres > country, type, year
+    - [ ] maybe later on move to hybrid approach, with CF using movielens dataset, with more recent data (25M or 32M)
+    - [ ] Use recent watched with rating to recommend movies with waiting status
+        - [ ] Use recency weighting with decay, like <10 watched with weight 1.0, 10-50 weight 0.5, or something like that (But beware of Feedback Loop)
+    - [ ] Building CF recsys from scratch, because lightfm and surprise (incompatible numpy version) is outdated
+    - [ ] LLM for recsys? using Gemini 2.5 model
+    - [ ] write test for recsys utils
+    - [x] Feeling lucky: random, recent added
 - [ ] Calling LLM API for smart summarize like: total watched time,... using name and year field
   - [ ] As a chatbot interface?
 - [ ] Add another table for watched movies in the past (long time ago) but don't remember the date exactly. Maybe just contains: id, name, year, country.
@@ -40,6 +34,7 @@
 - [ ] Add constants for updating the csv file or not in utils/constants
     - [ ] `csv` command to update csv file separately, instead of doing it after CRUD operations, faster UX?
 - [ ] Run CLI by using shorter name like `mm ...` (movie-manager) instead of `py cli.py ...` (using uv?)
+- [ ] Default value for watched_date is today if status is completed or dropped when adding a new movie
 
 ### Web App
 - [ ] Add input validation for Add and Edit pages
@@ -122,3 +117,9 @@
 - Testing for CLI commands -> Not necessary, make it harder to maintain
 - Add logging for web app -> Harder to maintain
 - Add .dbml (Database Markup Language) file -> Why doesn't have sqlite conversion :), so many limitations
+- Add a git hook or pre-commit to remove note data before public to github, no need to skip-worktree anymore -> This will end up having 2 separated sqlite database file, which is ineffective, because it need to ignore local file and track the public file, also it will change the file in code...
+- tf-idf and SBERT for recsys -> not suitable
+- Sentiment analysis for `note` field to extract useful information -> no need for now, when the note is too personal, more suitable for users reviews (Collaborative filtering)
+- Sequence Aware Recsys -> overkill
+- Using LLM to create Overview/description/info of movie -> too much work and API callings
+- Add recent adding for Recommandation page/recommend command, maybe using 5 latest rows, partly show user interests at current time -> sometime user just binge-add movies by an actor/actress
