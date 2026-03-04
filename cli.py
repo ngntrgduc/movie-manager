@@ -521,16 +521,52 @@ def optimize():
     )
 
 @cli.command()
-def recommend():
-    """Recommend some movies or series."""
-    from utils.sql import run_sql
+@click.argument('movie_id', type=int, required=False)
+@click.argument('k', type=int, required=False, default=5)
+@timing
+def recommend(movie_id, k):
+    """Recommend K movies based on movie_id if provided."""
     from utils.cli import print_rows
 
     cur = CON.cursor()
+    hide_columns = ['rating', 'watched_date']
 
-    print('Recent added:')
-    rows, column_names = run_sql(cur, Path('sql/recentwaiting.sql').read_text())
-    print_rows(rows, column_names, hide_columns=['rating', 'watched_date'])
+    if movie_id is not None:
+        from utils.movie import get_movie
+
+        CON.row_factory = sqlite3.Row
+        cur = CON.cursor()
+
+        movie = get_movie(movie_id, cur)
+        if movie is None:
+            print(f'Movie with id {movie_id} not found.')
+            return
+
+        movie = dict(movie)
+        print(f"Recommend {k} movies similar to: {movie['name']} ({movie['year']})")
+        from utils.recsys import recommend
+
+        df = load_movies(CON)
+        df = df.drop(columns='note')
+        df = df.reset_index(drop=True)
+
+        print('Computing item similarity matrix...')
+        recommended = recommend(movie['id'], df, top_k=k)
+        recommended = recommended.fillna('')  # make print_rows won't disply nan values
+        rows = list(recommended.itertuples(index=False, name=None))  # match print_rows type hint
+        headers = recommended.columns.tolist()
+        print_rows(rows, headers, hide_columns=hide_columns)
+    else:
+        from utils.sql import run_sql
+
+        print('Recent added movies:')
+        rows, column_names = run_sql(cur, Path('sql/recentwaiting.sql').read_text())
+        print_rows(rows, column_names, hide_columns=hide_columns)
+
+        print('Feeling lucky (random movies):')
+        rows, column_names = run_sql(cur, Path('sql/random.sql').read_text())
+        print_rows(rows, column_names, hide_columns=hide_columns)
+
 
 
 if __name__ == '__main__':
