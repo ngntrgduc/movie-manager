@@ -547,7 +547,7 @@ def recommend(movie_id, top_k):
         print_rows(rows, headers, hide_columns=hide_columns)
 
     df = load_movies(CON)
-    df = df.drop(columns='note').reset_index(drop=True)
+    df = df.drop(columns='note')
 
     if movie_id is not None:
         from utils.movie import get_movie
