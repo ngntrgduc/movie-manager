@@ -22,3 +22,4 @@ Recommendation threshold: > **8**
 ### Notes
 - All posts or discussions about "overrated" movies usually mean: *a movie I personally dislike, even if others love it* 🙃.
 - Everyone has their own standards, tastes, and preferences. If someone doesn’t like a movie, we can’t make them like it.
+- You will **never** finish your to-watch list. Nobody does. The purpose of the hobby isn’t “finish everything” — it’s: **maximize enjoyment per hour, not maximize completion rate.**
