@@ -11,9 +11,14 @@ def build_item_feature_matrix(df: pd.DataFrame) -> pd.DataFrame:
     # Min-max scaling year column
     min_year, max_year =  df['year'].min(), df['year'].max()
     df_features['year'] = (df['year'] - min_year) / (max_year - min_year)
+    df_features['year'] *= 0.2  # Downweight because same year doesn't mean high similarity
 
     country_features = df['country'].str.get_dummies()
+    country_features *= 0.4
+    
     type_features = df['type'].str.get_dummies()
+    type_features *= 0.5
+    
     genres_features = df['genres'].str.get_dummies(',')
 
     return pd.concat(
