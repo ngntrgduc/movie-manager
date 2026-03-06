@@ -575,10 +575,6 @@ def recommend(movie_id, top_k):
         recommended = recommend_recent_profile(df, top_k=top_k)
         display_recommended(recommended)
 
-        print('Recently added movies:')
-        rows, column_names = run_sql(cur, Path('sql/recentwaiting.sql').read_text())
-        print_rows(rows, column_names, hide_columns=hide_columns)
-
         print('Feeling lucky (random picks):')
         rows, column_names = run_sql(cur, Path('sql/random.sql').read_text())
         print_rows(rows, column_names, hide_columns=hide_columns)
