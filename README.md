@@ -45,6 +45,9 @@ For schema detail, see [schema.sql](/sql/schema.sql)
 **Dashboard**
 ![](/images/dashboard.png)
 
+**CLI**
+![](/images/cli_recsys.png)
+
 ## Notes
 - `kdrama` = `series` + `Korea` (similarly, `cdrama` = `series` + `China`)
 - `anime` = `animation` + `Japan`
