@@ -526,13 +526,13 @@ def optimize():
 @timing
 def recommend(movie_id, top_k):
     """
-    Recommend K movies by movie ID or based on recent watched movies.
+    Recommend K movies by movie ID or based on watched movies.
     
     If a movie ID is provided, the system returns the top-K movies most similar
     to the specified movie based on content features.
 
     If no movie ID is provided, recommendations are generated using a user
-    profile built from recently watched movies.
+    profile built from recently watched movies and all watched movies.
     """
     from utils.cli import print_rows
 
@@ -569,10 +569,14 @@ def recommend(movie_id, top_k):
         display_recommended(recommended)
     else:
         from utils.sql import run_sql
-        from utils.recsys import recommend_recent_profile
+        from utils.recsys import recommend_recent_profile, recommend_all_profile
 
         print('Recommendations based on recently watched movies:')
         recommended = recommend_recent_profile(df, top_k=top_k)
+        display_recommended(recommended)
+
+        print('Recommendations based on all watched movies (rating weights x time decay):')
+        recommended = recommend_all_profile(df, top_k=top_k)
         display_recommended(recommended)
 
         print('Feeling lucky (random picks):')
