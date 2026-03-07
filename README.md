@@ -14,6 +14,11 @@ So I built this movie manager as a more convenient way to manage my movie collec
 - Backup and Restore
 - Testing and Logging functionalities (for CLI)
 - Content-based movies recommender system (for CLI)
+  - Recommend movies similar to a given movie ID
+  - Recommend movies based on recently watched movies using a user profile
+  - Recommend movies based on all watched movies using:
+    - Rating-based weighting to emphasize highly rated movies
+    - Exponential time decay for recency weighting, prioritize recent watches
 
 ## Tech stack
 - Web UI: Streamlit
