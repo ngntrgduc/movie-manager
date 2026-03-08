@@ -46,7 +46,7 @@ def recommend(movie_id: int, df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
     similarity_df = build_item_similarity_matrix(feature_matrix, df)
 
     if movie_id not in similarity_df.index:
-        return f"Movie ID {movie_id} not found."
+        return f'Movie ID {movie_id} not found.'
 
     sim_scores = similarity_df.loc[movie_id].drop(movie_id)  # remove itself
 
@@ -58,6 +58,23 @@ def recommend(movie_id: int, df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
 
     return df[df['id'].isin(top_movies.index)]
 
+def recommend_from_user_profile(
+    user_profile,
+    df: pd.DataFrame,
+    feature_matrix: pd.DataFrame,
+    top_k: int = 5
+) -> pd.DataFrame:
+    """Rank movies based on similarity to a user profile."""
+
+    similarity_scores = cosine_similarity([user_profile], feature_matrix).flatten()
+    sim_series = pd.Series(similarity_scores, index=df['id'])
+
+    unwatched_ids = df[df['status'] == UNWATCHED_STATUS]['id']
+    sim_series = sim_series.loc[unwatched_ids]
+    top_ids = sim_series.sort_values(ascending=False).head(top_k).index
+
+    return df.set_index('id').loc[top_ids].reset_index()  # preserve ranking orders
+
 def recommend_recent_profile(df: pd.DataFrame, profile_size: int = 5, top_k: int = 5) -> pd.DataFrame:
     """Recommend movies using a user profile built from recently watched movies."""
 
@@ -67,19 +84,7 @@ def recommend_recent_profile(df: pd.DataFrame, profile_size: int = 5, top_k: int
     feature_matrix = build_item_feature_matrix(df) 
     user_profile = feature_matrix.loc[recent.index].mean(axis=0)
 
-    similarity_scores = cosine_similarity([user_profile], feature_matrix).flatten()
-
-    sim_series = pd.Series(similarity_scores, index=df['id'])
-
-    # remove watched movies
-    unwatched_ids = df[df['status'] == UNWATCHED_STATUS]['id']
-    sim_series = sim_series.loc[unwatched_ids]
-
-    top_ids = sim_series.sort_values(ascending=False).head(top_k).index
-
-    # preserve ranking orders
-    recommended = df.set_index('id').loc[top_ids].reset_index()
-    return recommended
+    return recommend_from_user_profile(user_profile, df, feature_matrix, top_k)
 
 def recommend_all_profile(df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
     """
@@ -102,13 +107,13 @@ def recommend_all_profile(df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
         return np.exp(-decay_rate*t)
 
     def normalize_watched_date(date_str):
-        """Normalize watched_date values into a pandas Timestamp."""
+        """Normalize watched_date values into pandas Timestamp."""
         if pd.isna(date_str):
             return None
         
         date_str = str(date_str)
 
-        # conver to mid-year for year-only and year with month data, mid-year is 1 July
+        # convert to mid-year for year-only and year with month data, mid-year is 1 July
         if len(date_str) == 4:  # YYYY
             return pd.Timestamp(f'{date_str}-07-01')
 
@@ -128,23 +133,11 @@ def recommend_all_profile(df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
     watched_date = watched_df['watched_date'].apply(normalize_watched_date)
     today = pd.Timestamp.today().normalize()  # .normalize() removes the time portion
     days_since_watch = (today - watched_date).dt.days
+
     decay_rate = half_life(180)
-    time_decay_weights = exponential_decay(days_since_watch, decay_rate=decay_rate)
+    time_decay_weights = exponential_decay(days_since_watch, decay_rate)
 
     weights = rating_weights * time_decay_weights
-
     user_profile = np.average(watched_features, axis=0, weights=weights)
 
-    similarity_scores = cosine_similarity([user_profile], feature_matrix).flatten()
-
-    sim_series = pd.Series(similarity_scores, index=df['id'])
-
-    # remove watched movies
-    unwatched_ids = df[df['status'] == UNWATCHED_STATUS]['id']
-    sim_series = sim_series.loc[unwatched_ids]
-
-    top_ids = sim_series.sort_values(ascending=False).head(top_k).index
-
-    # preserve ranking orders
-    recommended = df.set_index('id').loc[top_ids].reset_index()
-    return recommended
+    return recommend_from_user_profile(user_profile, df, feature_matrix, top_k)
