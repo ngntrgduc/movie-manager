@@ -48,17 +48,6 @@ For schema detail, see [schema.sql](/sql/schema.sql)
 **CLI**
 ![](/images/cli_recsys.png)
 
-## Notes
-- `kdrama` = `series` + `Korea` (similarly, `cdrama` = `series` + `China`)
-- `anime` = `animation` + `Japan`
-- `romcom` = `romance` + `comedy`
-- For privacy reasons, all notes were removed from the database.
-- Remember to refresh all tables to get the latest data in the Power BI report (`dashboard.pbix`).
-- `rich.Table` is bad at handling clickable links, so it is recommended to view notes in the web app or using `get` command in CLI.
-- Adding multiline notes in CLI is limited, `click.prompt()` just accepts a single-line prompt string, use the web app instead.
-- The CLI `update` command is intended for editing existing field values, not for clearing them. To remove a field’s content, use the web app instead.
-- The CLI `add`/`update` command cannot add/update new country, use the web app instead.
-
 ## Recent updates
 - `v0.4.0` - Added logging, content-based recommender system, improved CLI and web app
 - `v0.3.1` - Improved CLI, added testing
@@ -130,5 +119,16 @@ uv sync --dev
 ```
 uv run pytest
 ```
+
+## Notes
+- `kdrama` = `series` + `Korea` (similarly, `cdrama` = `series` + `China`)
+- `anime` = `animation` + `Japan`
+- `romcom` = `romance` + `comedy`
+- For privacy reasons, all notes were removed from the database.
+- Remember to refresh all tables to get the latest data in the Power BI report (`dashboard.pbix`).
+- `rich.Table` is bad at handling clickable links, so it is recommended to view notes in the web app or using the `get` command in the CLI.
+- Adding multiline notes in CLI is limited. `click.prompt()` just accepts a single-line prompt string, use the web app instead.
+- The CLI `update` command is intended for editing existing field values, not for clearing them. To remove a field’s content, use the web app instead.
+- The CLI `add`/`update` command cannot add or update a new country, use the web app instead.
 
 #### Happy watching 😄. But remember that movies are also a form of escapism 😢.
