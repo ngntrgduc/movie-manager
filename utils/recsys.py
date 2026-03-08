@@ -51,12 +51,11 @@ def recommend(movie_id: int, df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
     sim_scores = similarity_df.loc[movie_id].drop(movie_id)  # remove itself
 
     # Keep unwatched movies
-    valid_ids = df[df['status'] == UNWATCHED_STATUS]['id']
-    sim_scores = sim_scores[sim_scores.index.isin(valid_ids)]
+    unwatched_ids = df[df['status'] == UNWATCHED_STATUS]['id']
+    sim_scores = sim_scores[sim_scores.index.isin(unwatched_ids)]
     
-    top_movies = sim_scores.sort_values(ascending=False).head(top_k)    
-
-    return df[df['id'].isin(top_movies.index)]
+    top_ids = sim_scores.sort_values(ascending=False).head(top_k).index
+    return df[df['id'].isin(top_ids)]
 
 def recommend_from_user_profile(
     user_profile,
