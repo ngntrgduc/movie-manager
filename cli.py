@@ -537,7 +537,8 @@ def recommend(movie_id, top_k):
     from utils.cli import print_rows
 
     cur = CON.cursor()
-    hide_columns = ['rating', 'watched_date']
+    # recommended result always in waiting status, no rating and watched_date
+    hide_columns = ['status', 'rating', 'watched_date']
 
     def display_recommended(recommended) -> None:
         """Format and display recommended movies using print_rows."""
