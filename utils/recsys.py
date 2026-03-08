@@ -75,18 +75,26 @@ def recommend_from_user_profile(
 
     return df.set_index('id').loc[top_ids].reset_index()  # preserve ranking orders
 
-def recommend_recent_profile(df: pd.DataFrame, profile_size: int = 5, top_k: int = 5) -> pd.DataFrame:
+def recommend_recent_profile(
+    df: pd.DataFrame, 
+    feature_matrix: pd.DataFrame, 
+    profile_size: int = 5, 
+    top_k: int = 5
+) -> pd.DataFrame:
     """Recommend movies using a user profile built from recently watched movies."""
 
     watched_df = df[df['status'] == 'completed']
     recent = watched_df.sort_values('watched_date', ascending=False).head(profile_size)
     
-    feature_matrix = build_item_feature_matrix(df) 
     user_profile = feature_matrix.loc[recent.index].mean(axis=0)
 
     return recommend_from_user_profile(user_profile, df, feature_matrix, top_k)
 
-def recommend_all_profile(df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
+def recommend_all_profile(
+    df: pd.DataFrame, 
+    feature_matrix: pd.DataFrame, 
+    top_k: int = 5
+) -> pd.DataFrame:
     """
     Recommend movies using a user profile built from all completed movies.
 
@@ -123,8 +131,6 @@ def recommend_all_profile(df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
         return pd.Timestamp(date_str)
 
     watched_df = df[df['status'] == 'completed']
-
-    feature_matrix = build_item_feature_matrix(df) 
     
     watched_features = feature_matrix.loc[watched_df.index]
     

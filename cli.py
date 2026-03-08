@@ -531,8 +531,8 @@ def recommend(movie_id, top_k):
     If a movie ID is provided, the system returns the top-K movies most similar
     to the specified movie based on content features.
 
-    If no movie ID is provided, recommendations are generated using a user
-    profile built from recently watched movies and all watched movies.
+    If no movie ID is provided, recommendations are generated using user 
+    profiles built from recently watched movies and from all watched movies.
     """
     from utils.cli import print_rows
 
@@ -565,19 +565,21 @@ def recommend(movie_id, top_k):
         print(f"Recommend {top_k} movies similar to: {movie['name']} ({movie['year']})")
         from utils.recsys import recommend
 
-        print('Computing item similarity matrix...')
         recommended = recommend(movie['id'], df, top_k=top_k)
         display_recommended(recommended)
     else:
         from utils.sql import run_sql
+        from utils.recsys import build_item_feature_matrix
         from utils.recsys import recommend_recent_profile, recommend_all_profile
+        
+        feature_matrix = build_item_feature_matrix(df)
 
         print('Recommendations based on recently watched movies:')
-        recommended = recommend_recent_profile(df, top_k=top_k)
+        recommended = recommend_recent_profile(df, feature_matrix, top_k=top_k)
         display_recommended(recommended)
 
         print('Recommendations based on all watched movies (rating weights x time decay):')
-        recommended = recommend_all_profile(df, top_k=top_k)
+        recommended = recommend_all_profile(df, feature_matrix, top_k=top_k)
         display_recommended(recommended)
 
         print('Feeling lucky (random picks):')
