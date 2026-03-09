@@ -1,21 +1,10 @@
 ## Todo
-- [x] Movies recommendation system using item similarity (Content-based)
-    - [x] Using `recommend` command for recommendation
-        - [x] Accept movie id to get the "More like this" recommendation
-        - [ ] accept genres by -g + Knowledge-based recsys, also consider other options like country or type, status always = 'waiting'
-    - [ ] Apply genres weighting, genres > country, type, year
-    - [ ] maybe later on move to hybrid approach, with CF using movielens dataset, with more recent data (25M or 32M)
-    - [ ] Use recent watched with rating to recommend movies with waiting status
-        - [ ] Use recency weighting with decay, like <10 watched with weight 1.0, 10-50 weight 0.5, or something like that (But beware of Feedback Loop)
-    - [ ] Building CF recsys from scratch, because lightfm and surprise (incompatible numpy version) is outdated
-    - [ ] LLM for recsys? using Gemini 2.5 model
-    - [ ] write test for recsys utils
-    - [x] Feeling lucky: random, recent added
+- [ ] Store the similarity_df as csv file for faster recommend process only when dataset grow to ~1k or 2k movies, for now (~350), simplicity is the best
 - [ ] Calling LLM API for smart summarize like: total watched time,... using name and year field
   - [ ] As a chatbot interface?
 - [ ] Add another table for watched movies in the past (long time ago) but don't remember the date exactly. Maybe just contains: id, name, year, country.
+    - [ ] Or make all completed/dropped movie without watched date be marked as 'Past'/'In the past'? 
 - [ ] Add epsisode, length columns (or as a table) for more metadata, more fun to data-analysis like: total watched time, total watched time for a genre...
-- [ ] Make all completed/dropped movie without watched date be marked as 'Past'/'In the past'? does it reasonable to do that?
 
 ### CLI
 - [ ] CLI demo as GIF and put it in README
@@ -87,7 +76,16 @@
 - [x] Add logging functionalities for CRUD (db related, backup restore...) in CLI
     - [x] Update csv_to_sqlite to prevent logging
 - [x] Allow user to write and run SQL code directly, instead of just select SQL filename
-
+- [x] Recys
+    - [x] Using `recommend` command for recommendation
+        - [x] Accept movie id to get the "More like this" recommendation
+    - [x] Apply weighting, genres > country, type, year
+    - [x] Reduce year weighting
+    - [x] Use recent watched with rating to recommend movies with waiting status
+        - [x] Use recency weighting with decay (for all watched movies)
+    - [x] Content-based recommendation with cleaned movie-lens dataset
+        - [x] Merging local data + movielens data -> doing recsys
+    - [x] write test for recsys utils
 
 ## Abandoned
 - Color for dataframe using pandas Styler -> Pandas Styler does not compatible with streamlit dataframe, keep it simple
@@ -123,3 +121,6 @@
 - Sequence Aware Recsys -> overkill
 - Using LLM to create Overview/description/info of movie -> too much work and API callings
 - Add recent adding for Recommandation page/recommend command, maybe using 5 latest rows, partly show user interests at current time -> sometime user just binge-add movies by an actor/actress
+- `recommend` + accept genres by -g + Knowledge-based recsys -> `filter` command do the job, knowledge-based recsys shine when dataset is large
+- LLM for recsys, using Gemini 2.5 model with genai library -> slow, non-deterministic
+- move to hybrid approach, with CF using movielens dataset, with more recent data (25M or 32M) -> latest data is cut off at 2018-2019, so not useful enough, not suitable for this scale
