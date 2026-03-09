@@ -102,7 +102,7 @@ Commands:
   latest     Show latest added movies.
   optimize   Optimize the SQLite database using VACUUM.
   recent     Show recently watched movies.
-  recommend  Recommend K movies based on movie_id if provided.
+  recommend  Recommend K movies by movie ID or based on watched movies.
   restore    Restore data from backup.
   search     Search movies by keyword.
   sql        Run a SQL file from the 'sql/' folder.
