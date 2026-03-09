@@ -1,8 +1,66 @@
+2026-03-10
+- llm4rec: trained on other user preference, they will push toward to popular/mainstream recommendation because that's what dominate the training data. Also, it's non-deterministic -> hard to trust, evaluate
+- llm4rec can solve the cold-start problem for new user at scale, this project doesn't face that
+
+2026-03-09
+- use only completed data from personal data to recommend movielens data, because other waiting movie is missing rating and watched_date, they reflect intent, not experience. A user profile should represent taste, not curiosity
+- we need to merge both personal data and movielens data, because it will cause mismatch when building feature matrix if not merged
+- build recsys on movielens data
+- try out claude.ai, worth all the hype 🙏
+  - on testing for recsys, sample size — 5 is enough, we don't care about result quality
+
+2026-03-08
+- Hide watched_date column in recommend command
+- build recommend_from_user_profile helper
+- messing around with movielens data, cleaned and make it compatible with local database, created movielens-cleaned and movielens-extended csv files
+
+2026-03-07
+- TimeDeltas.dt.days to get the days, whereas Timestamp.dt.day get the exact day of the date
+- use sim_scores = sim_scores[sim_scores.index.isin(valid_ids)]
+  instead of sim_scores = sim_scores.loc[valid_ids] in `recommend` function because it removed a movie id, so .loc[] will break
+- using weights = rating weights x exponential time decay greatly improve recommended result. When not use time decay, just use rating weights, result k=10 contains lots of rom-com genres (from the past), but when use it, the recommended result is more diversified, still have rom-com and also animationg genre
+- when using rating weighting for recently watched user profile, it's improve result, if recent watch have a movie with 7 rating, then recommended result does not contain comedy genre movies, compare to 1 movie with comedy genre when not using rating weighting
+- for year with out month and day, assume mid year for rating weighting
+- time decay for recent user profile is unecessary, use it for all watched movies user profile
+- remove loading similarity matrix from file, because it doesn't significant faster than compute it directly, it faster when changing the get_movie function to accept list of movie id, but then the design architecture need to change, also, need to store similarity matrix file, not worth it, use this approach when the dataset grow up to 1k+ movies
+---
+def load_similarity(df: pd.DataFrame) -> pd.DataFrame:
+    """Load precomputed similarity matrix if it exists, otherwise compute it and save to file."""
+    
+    from pathlib import Path
+
+    similarity_file = Path('data/similarity.csv')
+    data_file = Path('data/data.csv')
+
+    if similarity_file.exists():
+        # Load similarity matrix if similarity file is newer than data file
+        if similarity_file.stat().st_mtime >= data_file.stat().st_mtime:
+            print('Loading similarity matrix from file...')
+            similarity_df = pd.read_csv(similarity_file, index_col='id')
+            # Pandas load columns names as string, so we convert it back to int
+            similarity_df.columns = similarity_df.columns.astype(int)
+            return similarity_df
+
+    print('Computing similarity matrix...')
+    feature_matrix = build_item_feature_matrix(df)
+    similarity_df = build_item_similarity_matrix(feature_matrix, df)
+
+    print('Saving similarity matrix to file...')
+    similarity_df.to_csv(similarity_file)
+    return similarity_df
+---
+
+
+2026-03-06
+- precompute similarity matrix and store it to file
+  - for small dataset, the speedup time when loading precomputed similarity matrix is not significant compare to compute it directly
+
 2026-03-04
 - for similarity-based (item-item), there no need for evaluation because there is no ground truth
 - use minmaxscaler from scikitlearn to prevent information leakage when train-test spliting
 - Build similarity matrix using ALL movies, not remove dropped and completed status
 - completed recsys feature for content-based item-item
+- add user-profile based on recent watched movies
 
 2026-03-02
 - for small dataset at current (~350 movies with 66 completed), ML and DL models are overkill, stick with content-based item similarity
