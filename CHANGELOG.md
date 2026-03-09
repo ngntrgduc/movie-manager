@@ -18,6 +18,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  -->
 
+## [[v0.4.1](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.1)]
+### Added
+- Recommendation based on recently watched movies using a user profile
+- Weights for features, improve recommendation result, more interpretable
+- SQL: `old.sql`
+- Recommendation based on all watched movies using a weighted user profile
+    - Rating-based weighting `(rating / 10)^2` to emphasize highly rated movies
+    - Exponential time decay weighting to prioritize recently watched movies
+- Hide `watched_date` column in `recommend` command
+- Add cleaned and extended MovieLens Latest Small data + recsys notebook 
+- Testing for recsys
+
+### Changed
+- Argument K to options, can specify top K recommendations result without movie id
+- Update data (data.csv, movies.db) for recsys notebook (360 movies/series in total)
+
+### Removed
+- Recently added movies part in `recommend` command
+
 ## [[v0.4.0](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.0)]
 ### Added
 - Testing for cli utils
