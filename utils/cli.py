@@ -185,3 +185,26 @@ def resolve_movie_id(movie_id, latest, cur) -> int | None:
         return fetch_scalar(cur, 'SELECT id FROM movie ORDER BY id DESC LIMIT 1')
 
     return movie_id
+
+def parse_range(value: str) -> tuple[str, list]:
+    """
+    Parse a range string into a SQL clause fragment and parameters.
+
+    Supports: 2010-2020, >2020, <2000, 2020
+
+    Returns: (clause, params) e.g. ('year BETWEEN ? AND ?', [2010, 2020])
+    """
+    import re
+
+    value = value.strip()
+
+    if m := re.fullmatch(r'(\d+)-(\d+)', value):
+        return 'BETWEEN ? AND ?', [int(m[1]), int(m[2])]
+    if m := re.fullmatch(r'>(\d+)', value):
+        return '> ?', [int(m[1])]
+    if m := re.fullmatch(r'<(\d+)', value):
+        return '< ?', [int(m[1])]
+    if re.fullmatch(r'\d+', value):
+        return '= ?', [int(value)]
+
+    raise ValueError(f"Invalid range format: '{value}'. Use e.g. 2010-2020, >2020, <2000, or 2020")

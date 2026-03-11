@@ -32,7 +32,7 @@ def cli():
 
 @cli.command(no_args_is_help=True)
 @click.option('-n', '--name', help='Filter by name (case-insensitive)')
-@click.option('-y', '--year', type=int, help='Filter by release year')
+@click.option('-y', '--year', help='Filter by year (e.g. 2020, 2010-2020, >2020, <2000)')
 @click.option('-s', '--status', help="Filter by status: 'waiting', 'completed', or 'dropped'")
 @click.option('-t', '--movie-type', help="Filter by type: 'movie' or 'series'")
 @click.option('-c', '--country', help='Filter by country')
@@ -80,8 +80,10 @@ def filter(
             clause.append('name LIKE ?')
             parameters.append(f'%{name}%')
         if year:
-            clause.append('year = ?')
-            parameters.append(year)
+            from utils.cli import parse_range
+            op, params = parse_range(year)
+            clause.append(f'year {op}')
+            parameters.extend(params)
         if status:
             clause.append('status = ?')
             parameters.append(status)
