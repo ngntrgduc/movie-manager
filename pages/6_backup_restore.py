@@ -12,7 +12,7 @@ BACKUP_FILE = Path('data/backup.db')
 def update_csv() -> None:
     """Update CSV file with data from database."""
     with get_connection() as con:
-        df = load_movies(con, with_index=True)
+        df = load_movies(con, with_index=False)
         df.to_csv('data/data.csv', index=False)
 
 def backup() -> None:

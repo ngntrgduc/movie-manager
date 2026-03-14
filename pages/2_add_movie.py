@@ -59,7 +59,7 @@ def add_to_db() -> None:
         con.commit()
 
         # Update csv file
-        df = load_movies(con, with_index=True)
+        df = load_movies(con, with_index=False)
         df.to_csv('data/data.csv', index=False)
 
     st.toast(f'Added **{name}**.', icon='✅')

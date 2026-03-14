@@ -19,7 +19,7 @@ CON = get_connection(DB_FILE)
 
 def update_csv() -> None:
     """Update CSV file with data from database."""
-    df = load_movies(CON, with_index=True)
+    df = load_movies(CON, with_index=False)
     df.to_csv('data/data.csv', index=False)
 
 # changes the default parameters to -h and --help instead of just --help
@@ -360,7 +360,7 @@ def backup(csv):
 
             CON.backup(backup_con)
         if csv:
-            df = load_movies(CON, with_index=True)
+            df = load_movies(CON, with_index=False)
             df.to_csv('data/backup.csv', index=False)
         print('Backup successful.')
         logger.info('Backup successful')

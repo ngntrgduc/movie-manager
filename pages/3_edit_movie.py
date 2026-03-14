@@ -59,7 +59,7 @@ if container.button(
         con.commit()
         
         # Update csv file
-        df = load_movies(con, with_index=True)
+        df = load_movies(con, with_index=False)
         df.to_csv('data/data.csv', index=False)
 
     load_data_with_cache.clear()  # Clear cache
