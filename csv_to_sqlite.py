@@ -56,6 +56,7 @@ if __name__ == '__main__':
     con.commit()
 
     df = pd.read_csv(CSV_PATH)
+    df = df.drop(columns=['id'], errors='ignore')  # errors='ignore' in case id column doesn't exist
     csv_to_sqlite(df, con)
     con.commit()
 
