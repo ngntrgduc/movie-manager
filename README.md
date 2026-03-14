@@ -24,8 +24,9 @@ So I built this movie manager as a more convenient way to manage my movie collec
 - Web UI: Streamlit
 - Database: SQLite + CSV file (for Power BI dashboard)
 - Visualization: Power BI
-- CLI: Click + Rich
+- CLI: Click, Rich
 - Testing: Pytest
+- Recommender System: pandas, NumPy, scikit-learn
 
 ## Architecture
 ![](images/architecture.png)
