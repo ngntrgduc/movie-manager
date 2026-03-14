@@ -1,5 +1,6 @@
 ## Todo
 - [ ] Store the similarity_df as csv file for faster recommend process only when dataset grow to ~1k or 2k movies, for now (~350), simplicity is the best
+- [ ] Implement recsys evaluation when completed movie grow up to ~200-300 movies
 - [ ] Calling LLM API for smart summarize like: total watched time,... using name and year field
   - [ ] As a chatbot interface?
 - [ ] Add another table for watched movies in the past (long time ago) but don't remember the date exactly. Maybe just contains: id, name, year, country.
@@ -15,15 +16,10 @@
         - [ ] Or hide it when the total length exceed a specific threshold?
     - [ ] Add confirmation when adding new country
 - [ ] `info` command to call Gemini API to summarize movie info: description, ratings, casts...
-    - [ ] Implement llm.py in utils, lazy loading genai lib?
-- [ ] Extend `recent` command, make it have some other option like country, type, status,...
 - [ ] Auto hide empty column in print_rows, not just filter command have it, sql can have it too
-- [ ] `range` command to filter movie by id in range, or maybe add this to filter command
-- [ ] Add constants for default limit of `recent` and `latest` command in utils/constants?
 - [ ] Add constants for updating the csv file or not in utils/constants
-    - [ ] `csv` command to update csv file separately, instead of doing it after CRUD operations, faster UX?
+    - [ ] `csv` command to update csv file separately, instead of doing it after CRUD operations, better UX?
 - [ ] Run CLI by using shorter name like `mm ...` (movie-manager) instead of `py cli.py ...` (using uv?)
-- [ ] Default value for watched_date is today if status is completed or dropped when adding a new movie
 
 ### Web App
 - [ ] Add input validation for Add and Edit pages
@@ -86,6 +82,7 @@
     - [x] Content-based recommendation with cleaned movie-lens dataset
         - [x] Merging local data + movielens data -> doing recsys
     - [x] write test for recsys utils
+- [x] handle: <2020, >2020, 2010-2020 filter by year, no need for `2000s.sql`
 
 ## Abandoned
 - Color for dataframe using pandas Styler -> Pandas Styler does not compatible with streamlit dataframe, keep it simple
@@ -124,3 +121,5 @@
 - `recommend` + accept genres by -g + Knowledge-based recsys -> `filter` command do the job, knowledge-based recsys shine when dataset is large
 - LLM for recsys, using Gemini 2.5 model with genai library -> slow, non-deterministic
 - move to hybrid approach, with CF using movielens dataset, with more recent data (25M or 32M) -> latest data is cut off at 2018-2019, so not useful enough, not suitable for this scale
+- Default value for watched_date is today if status is completed or dropped when adding a new movie -> cannot addding old movie, which has completed and doesn't have watched_date
+- Extend `recent` command, make it have some other option like country, type, status -> overlap with filter command

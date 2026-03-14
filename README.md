@@ -49,6 +49,7 @@ For schema detail, see [schema.sql](/sql/schema.sql)
 ![](/images/cli_recsys.png)
 
 ## Recent updates
+- `v0.4.2` - Added range-based year filtering, fixed and improved Power BI dashboard with model relationships and new KPI cards.
 - `v0.4.1` - Improved the recommender system using user profiles with rating and time decay weighting, updated dataset
 - `v0.4.0` - Added logging, content-based recommender system, improved CLI and web app
 - `v0.3.1` - Improved CLI, added testing

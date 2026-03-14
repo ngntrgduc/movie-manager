@@ -18,6 +18,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  -->
 
+
+
+## [[v0.4.2](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.2)]
+
+### Added
+- SQL: percent column for `type.sql`
+- `parse_range()` utility for parsing numeric range strings (`2020`, `2000-2020`, `>2020`, `<2000`)
+- Year filter (`-y/--year`) now supports range expressions instead of exact match only
+- Average Rating and Completion Rate KPI Cards in Power BI Dashboard
+
+### Changed
+- Update csv file now exports movie `id` column for Power BI model relationships
+- Power BI dashboard now uses model relationships instead of exploded genres column
+- Renamed "Movies & Series" to "Titles" for all dashboard visuals
+
+### Fixed
+- Average Rating calculation in Power BI dashboard was incorrect due to duplicated rows from genre explosion — resolved via model relationships
+
+### Removed
+- `2000s.sql` as it is now covered by `filter -y 2000-2009`
+
 ## [[v0.4.1](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.1)]
 ### Added
 - Recommendation based on recently watched movies using a user profile
