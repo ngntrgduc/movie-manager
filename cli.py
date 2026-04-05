@@ -261,6 +261,10 @@ def update(movie_id, note, latest):
     existing_movie.pop('id')
 
     updated_data = prompt_update_movie(existing_movie, just_note=note)
+    if not updated_data:
+        print('Nothing to update.')
+        return
+
     print(updated_data)
 
     update_movie(movie_id, updated_data, cur)
