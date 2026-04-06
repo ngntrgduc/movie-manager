@@ -529,20 +529,22 @@ def optimize():
 @cli.command()
 @click.argument('movie_id', type=int, required=False)
 @click.option('-k', '--top-k', default=5, help='Number of recommendations')
+@click.option('-p', '--profile-size', default=5, help='Number of recently watched to build profile from')
 @timing
-def recommend(movie_id, top_k):
+def recommend(movie_id, top_k, profile_size):
     """
     Recommend K movies by movie ID or based on watched movies.
     
     If a movie ID is provided, the system returns the top-K movies most similar
     to the specified movie based on content features.
 
-    If no movie ID is provided, recommendations are generated using user 
-    profiles built from recently watched movies and from all watched movies.
+    If no movie ID is provided, recommendations are generated from:
+    - a profile built from the last P watched movies
+    - a profile built from all watched movies (rating weights x time decay)
+    - random picks
     """
     from utils.cli import print_rows
 
-    cur = CON.cursor()
     # recommended result always in waiting status, no rating and watched_date
     hide_columns = ['status', 'rating', 'watched_date']
 
@@ -575,13 +577,12 @@ def recommend(movie_id, top_k):
         display_recommended(recommended)
     else:
         from utils.sql import run_sql
-        from utils.recsys import build_item_feature_matrix
-        from utils.recsys import recommend_recent_profile, recommend_all_profile
+        from utils.recsys import build_item_feature_matrix, recommend_recent_profile, recommend_all_profile
         
         feature_matrix = build_item_feature_matrix(df)
 
-        print('Recommendations based on recently watched movies:')
-        recommended = recommend_recent_profile(df, feature_matrix, top_k=top_k)
+        print(f'Recommendations based on last {profile_size} watched movies:')
+        recommended = recommend_recent_profile(df, feature_matrix, top_k=top_k, profile_size=profile_size)
         display_recommended(recommended)
 
         print('Recommendations based on all watched movies (rating weights x time decay):')
@@ -589,6 +590,7 @@ def recommend(movie_id, top_k):
         display_recommended(recommended)
 
         print('Feeling lucky (random picks):')
+        cur = CON.cursor()
         rows, column_names = run_sql(cur, Path('sql/random.sql').read_text())
         print_rows(rows, column_names, hide_columns=hide_columns)
 
