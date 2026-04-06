@@ -55,7 +55,7 @@ def recommend(movie_id: int, df: pd.DataFrame, top_k: int = 5) -> pd.DataFrame:
     sim_scores = sim_scores[sim_scores.index.isin(unwatched_ids)]
     
     top_ids = sim_scores.sort_values(ascending=False).head(top_k).index
-    return df[df['id'].isin(top_ids)]
+    return df.set_index('id').loc[top_ids].reset_index()
 
 def recommend_from_user_profile(
     user_profile,
