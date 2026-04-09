@@ -13,6 +13,6 @@ SELECT
     year,
     count,
     watched,
-    ROUND(100.0 * watched / count, 2) || '%' AS percent, 
+    ROUND(100.0 * watched / count, 2) || '%' AS watched_percent, 
     avg_rating
 FROM year_stats
