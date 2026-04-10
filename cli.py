@@ -599,6 +599,36 @@ def recommend(movie_id, top_k, profile_size, show_random):
             rows, column_names = run_sql(cur, Path('sql/random.sql').read_text())
             print_rows(rows, column_names, hide_columns=hide_columns)
 
+@cli.command()
+@click.argument('movie_id', type=int)
+def info(movie_id):
+    """Get more information of a movie by id."""
+    from utils.movie import get_movie
+
+    CON.row_factory = sqlite3.Row 
+    cur = CON.cursor()
+
+    movie = get_movie(movie_id, cur)
+    if movie is None:
+        print(f'Movie with id {movie_id} not found.')
+        return
+
+    movie = dict(movie)
+    print(movie)
+
+    name = movie['name'].strip().replace(' ', '+')
+    details = {
+        'IMDB': f"https://www.imdb.com/find/?q={name}+{movie['year']}",
+        'TMDB': f'https://www.themoviedb.org/search?query={name}',
+        'Letterboxd': f'https://letterboxd.com/search/{name}/',
+    }
+    country = movie['country']
+    if country in ('Korea', 'China'):
+        details['MyDramaList'] = f'https://mydramalist.com/search?q={name}'
+    
+    print('More detail in:')
+    for site, link in details.items():
+        print(f' - [link={link}]{site}[/link]')
 
 
 if __name__ == '__main__':
