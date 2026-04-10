@@ -530,8 +530,9 @@ def optimize():
 @click.argument('movie_id', type=int, required=False)
 @click.option('-k', '--top-k', default=5, help='Number of recommendations')
 @click.option('-p', '--profile-size', default=5, help='Number of recently watched to build profile from')
+@click.option('-r', '--random', 'show_random', is_flag=True, help='Append random unwatched picks after recommendations')
 @timing
-def recommend(movie_id, top_k, profile_size):
+def recommend(movie_id, top_k, profile_size, show_random):
     """
     Recommend K movies by movie ID or based on watched movies.
     
@@ -541,7 +542,8 @@ def recommend(movie_id, top_k, profile_size):
     If no movie ID is provided, recommendations are generated from:
     - a profile built from the last P watched movies
     - a profile built from all watched movies (rating weights x time decay)
-    - random picks
+    
+    Use -r/--random to also show random unwatched picks.
     """
     from utils.cli import print_rows
 
@@ -571,12 +573,11 @@ def recommend(movie_id, top_k, profile_size):
 
         movie = dict(movie)
         print(f"Recommend {top_k} movies similar to: {movie['name']} ({movie['year']})")
-        from utils.recsys import recommend
 
+        from utils.recsys import recommend
         recommended = recommend(movie['id'], df, top_k=top_k)
         display_recommended(recommended)
     else:
-        from utils.sql import run_sql
         from utils.recsys import build_item_feature_matrix, recommend_recent_profile, recommend_all_profile
         
         feature_matrix = build_item_feature_matrix(df)
@@ -589,10 +590,14 @@ def recommend(movie_id, top_k, profile_size):
         recommended = recommend_all_profile(df, feature_matrix, top_k=top_k)
         display_recommended(recommended)
 
-        print('Feeling lucky (random picks):')
-        cur = CON.cursor()
-        rows, column_names = run_sql(cur, Path('sql/random.sql').read_text())
-        print_rows(rows, column_names, hide_columns=hide_columns)
+        if show_random:
+            from utils.sql import run_sql
+            
+            print('Feeling lucky (random picks):')
+            cur = CON.cursor()
+            # Random pick 5 movies/series, random picks are for serendipity, not volume
+            rows, column_names = run_sql(cur, Path('sql/random.sql').read_text())
+            print_rows(rows, column_names, hide_columns=hide_columns)
 
 
 
