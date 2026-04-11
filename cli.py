@@ -340,10 +340,8 @@ def stats(verbose):
 
     total = fetch_rows_count(cur)
     avg_rating = fetch_scalar(cur, 'SELECT ROUND(AVG(rating), 2) FROM movie')
-    genres_count = fetch_rows_count(cur, 'genre')
     print(f'Total: {total}')
     print(f'Average rating: {avg_rating}')
-    print(f'Genres count: {genres_count}')
 
     sql_folder = Path('sql/')
     stat_files = ['status', 'type', 'country']
