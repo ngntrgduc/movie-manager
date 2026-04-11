@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  -->
 
 
+## [[v0.4.3](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.3)]
+
+### Added
+- SQL: add `watchedmonth` and `watchedmatrix`
+- Early return when nothing to update for `update` command, prevent no-op DB write, misleading log entry, spurious CSV update
+- `-p/--profile-size` flag for `recommend` command to control how many recently watched titles are used to build the recommendation profile
+- `-v/--verbose` flag for `get` command to display external search links (IMDB, TMDB, Letterboxd, MyDramaList for Asian titles)
+
+### Changed
+- SQL: rename percent column to watched_percent for `year.sql`
+- `recommend` command: random picks are now opt-in via `-r/--random` instead of always shown
+
+### Fixed
+- Drop id column in csv_to_sqlite to prevent conflict with SQLite autoincrement
+- Fixed recommendation results ignoring similarity score order when given a movie id
+
 
 ## [[v0.4.2](https://github.com/ngntrgduc/movie-manager/releases/tag/v0.4.2)]
 

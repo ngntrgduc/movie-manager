@@ -1,11 +1,15 @@
 ## Todo
 - [ ] Store the similarity_df as csv file for faster recommend process only when dataset grow to ~1k or 2k movies, for now (~350), simplicity is the best
+    - [ ] May be using numpy.savez for faster speed?
 - [ ] Implement recsys evaluation when completed movie grow up to ~200-300 movies
-- [ ] Calling LLM API for smart summarize like: total watched time,... using name and year field
-  - [ ] As a chatbot interface?
+- [ ] Calling LLM API (or local for privacy and cost-effective?) for smart summarize like: total watched time,... using name and year field
+  - [ ] As a chatbot interface? ollma?
 - [ ] Add another table for watched movies in the past (long time ago) but don't remember the date exactly. Maybe just contains: id, name, year, country.
     - [ ] Or make all completed/dropped movie without watched date be marked as 'Past'/'In the past'? 
 - [ ] Add epsisode, length columns (or as a table) for more metadata, more fun to data-analysis like: total watched time, total watched time for a genre...
+- [ ] Build Data pipeline to get latest news (from letterboxd, mydramalist), data of movies, use sentiment analysis or llm (maybe with agent too)
+    - [ ] Postgresql?
+- [ ] rename movie_type to media_type when needed
 
 ### CLI
 - [ ] CLI demo as GIF and put it in README
@@ -15,17 +19,19 @@
     - [ ] showing countries (5+) option when adding/updating is cluttered, bad UX -> hide it instead: show_default = False 
         - [ ] Or hide it when the total length exceed a specific threshold?
     - [ ] Add confirmation when adding new country
-- [ ] `info` command to call Gemini API to summarize movie info: description, ratings, casts...
 - [ ] Auto hide empty column in print_rows, not just filter command have it, sql can have it too
 - [ ] Add constants for updating the csv file or not in utils/constants
     - [ ] `csv` command to update csv file separately, instead of doing it after CRUD operations, better UX?
 - [ ] Run CLI by using shorter name like `mm ...` (movie-manager) instead of `py cli.py ...` (using uv?)
+- [ ] Add Maximal Marginal Relevance (MMR) when the data grow 
 
 ### Web App
 - [ ] Add input validation for Add and Edit pages
     - [ ] Year, date, rating validation 
 - [ ] Genres edit/delete page
 - [ ] Add Hide note/Show note column checkbox for Data page
+- [ ] add chatbot interface LLM summary (IMDB + Letterboxd style)? (but aware of cost, effectiveness of using LLM to summary, knowledge cutoff)
+    - [ ] use local llm for privacy and cost
 
 ### Dashboard
 - [ ] Allow it to use sqlite database instead of csv -> faster CLI experience
@@ -83,6 +89,8 @@
         - [x] Merging local data + movielens data -> doing recsys
     - [x] write test for recsys utils
 - [x] handle: <2020, >2020, 2010-2020 filter by year, no need for `2000s.sql`
+- [x] Provide all search link for title search (imdb, letterboxd) for faster access to movie/series information
+- [x] Switch random picks in `recommend` command to a flag (-r/--random)?  because when using it, user rarely look down to random picks sections, just recommended result from recent profile and all profile
 
 ## Abandoned
 - Color for dataframe using pandas Styler -> Pandas Styler does not compatible with streamlit dataframe, keep it simple
@@ -123,3 +131,7 @@
 - move to hybrid approach, with CF using movielens dataset, with more recent data (25M or 32M) -> latest data is cut off at 2018-2019, so not useful enough, not suitable for this scale
 - Default value for watched_date is today if status is completed or dropped when adding a new movie -> cannot addding old movie, which has completed and doesn't have watched_date
 - Extend `recent` command, make it have some other option like country, type, status -> overlap with filter command
+- Show genres and country, status (other info) when using `recommend` for a movie id -> when using movie id to recommend, user already know other information, not needed
+- TMDB API integration -> TMDB API is not robust, inconsistence (eg. search for Love All Play 2022 kdrama but return Love All Play anime from Japan), also sometime not responding
+- Add `--note` for `recommend` command to show note of recommended movies -> recommend command is about discovery
+- Add thismonth and thisyear count for `stats` command -> redundant because sql thismonth.sql and thisyear.sql already output the result and the count itself, and stats command scope is broader

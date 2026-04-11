@@ -1,3 +1,32 @@
+2026-04-11
+- TMDB API is not robust (search for Love All Play (korea) but return an anime from Japan)
+  - remove it intergration in info command
+
+2026-04-10
+- MMR should not applied to recommend by id
+  - The redundancy MMR penalize is only a problem when building a list that represent your tatse broadly -> user profile
+- thinking of storing result from TMDB API call in sqlite database, like tmdb.db? store id, tmdb_id, poster_path?
+- use requests.session for connection pooling, prevent stoping when calling 2 consecutive call
+  - Session matain a persistent connection pool, both call reuse the same underlying TCP connection
+
+2026-04-06
+- when user profile = 1, py cli.py recommend having the same result as py cli.py recommend <latest_watched_movie_id> -> recommend and recommend_recent_profile is consistent
+- add -p/--profile-size for recommend command
+- no need to print AsianWiki, just mydramalist is enough
+
+2026-04-05
+- add early return for update command when nothing is updated
+- TMDB API may be not suitable for on-going series, missing lot of data 
+- info command naming is better than tmdb command naming
+
+2026-03-13
+- rework power bi dashboard
+  - rename Movies & Series to Titles
+
+2026-03-11
+- add parse_range for flexible year filtering, no need for 2000s.sql
+
+
 2026-03-10
 - llm4rec: trained on other user preference, they will push toward to popular/mainstream recommendation because that's what dominate the training data. Also, it's non-deterministic -> hard to trust, evaluate
 - llm4rec can solve the cold-start problem for new user at scale, this project doesn't face that

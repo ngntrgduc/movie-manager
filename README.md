@@ -50,6 +50,7 @@ For schema detail, see [schema.sql](/sql/schema.sql)
 ![](/images/cli_recsys.png)
 
 ## Recent updates
+- `v0.4.3` - Bug fixes, new flags for get and recommend command, new SQL queries
 - `v0.4.2` - Added range-based year filtering, fixed and improved Power BI dashboard with model relationships and new KPI cards.
 - `v0.4.1` - Improved the recommender system using user profiles with rating and time decay weighting, updated dataset
 - `v0.4.0` - Added logging, content-based recommender system, improved CLI and web app
@@ -126,9 +127,8 @@ uv run pytest
 ## Notes
 - `kdrama` = `series` + `Korea` (similarly, `cdrama` = `series` + `China`)
 - `anime` = `animation` + `Japan`
-- `romcom` = `romance` + `comedy`
 - For privacy reasons, all notes were removed from the database.
-- Remember to refresh all tables to get the latest data in the Power BI report (`dashboard.pbix`).
+- Remember to refresh all tables to get the latest data in the Power BI dashboard.
 - `rich.Table` is bad at handling clickable links, so it is recommended to view notes in the web app or using the `get` command in the CLI.
 - Adding multiline notes in CLI is limited. `click.prompt()` just accepts a single-line prompt string, use the web app instead.
 - The CLI `update` command is intended for editing existing field values, not for clearing them. To remove a field’s content, use the web app instead.
