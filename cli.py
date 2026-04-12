@@ -536,7 +536,7 @@ def optimize():
     )
     print('Database optimized successfully.')
     logger.info(
-        'Database optimized: size_before=%s size_after=%s reduction=%s percent=%.1f%',
+        'Database optimized: size_before=%s size_after=%s reduction=%s percent=%.1f%%',
         repr_before, repr_after, repr_reduction, percent,
     )
 
